@@ -40,8 +40,5 @@ export class InventoryPage extends BasePage {
         await this.page.click(inventoryLocators.removeButton(itemName));
     }
 
-    async getCartCount(): Promise<string | null> {
-        return this.page.textContent(inventoryLocators.cartBadge);
-    }
 
 }

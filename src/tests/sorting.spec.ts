@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/loginPage';
 import { InventoryPage } from '../pages/inventoryPage';
 import {logger} from "../logger/logger";
+import {isSortedAscending} from "../utils/sortingUtil";
 
 test('UC-1 Price Sorting Validation', async ({ page }) => {
 
@@ -11,17 +12,28 @@ test('UC-1 Price Sorting Validation', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const inventoryPage = new InventoryPage(page);
 
-    logger.info('Go to Login Page');
-    await page.goto('/');
+    await test.step('Given user is logged in', async () => {
 
-    await loginPage.login('standard_user', 'secret_sauce');
+        await page.goto('/');
 
-    await inventoryPage.selectSort('Price (low to high)');
+        await loginPage.login('standard_user','secret_sauce');
 
-    const prices = await inventoryPage.getPrices();
+        await expect(page).toHaveURL(/inventory/);
 
-    const sortedPrices = [...prices].sort((a, b) => a - b);
+    });
 
-    expect(prices).toEqual(sortedPrices);
+    await test.step('When user selects Price low to high sorting', async () => {
+
+        await inventoryPage.selectSort('Price (low to high)');
+
+    });
+
+    await test.step('Then prices should be sorted ascending', async () => {
+
+        const prices = await inventoryPage.getPrices();
+
+        expect(isSortedAscending(prices)).toBeTruthy();
+
+    });
 
 });

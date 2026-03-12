@@ -11,23 +11,33 @@ test('UC-2 Cart State Logic', async ({ page }) => {
     const loginPage = new LoginPage(page);
     const inventoryPage = new InventoryPage(page);
 
-    logger.info('Go to Login Page');
-    await page.goto('/');
+    await test.step('Given user logged in', async () => {
 
-    await loginPage.login('standard_user', 'secret_sauce');
+        await page.goto('/');
 
-    for (const item of items) {
-        await inventoryPage.addItem(item);
-    }
+        await loginPage.login('standard_user','secret_sauce');
 
-    const badgeAfterAdd = await inventoryPage.getCartCount();
+    });
 
-    expect(badgeAfterAdd).toBe('2');
 
-    await inventoryPage.removeItem(items[0]);
+    await test.step('When user adds two items', async () => {
 
-    const badgeAfterRemove = await inventoryPage.getCartCount();
+        for(const item of items){
 
-    expect(badgeAfterRemove).toBe('1');
+            await inventoryPage.addItem(item);
+
+        }
+
+        await expect(page.locator('//span[@class="shopping_cart_badge"]')).toHaveText('2');
+
+    });
+
+    await test.step('Then removing one item updates cart badge', async () => {
+
+        await inventoryPage.removeItem(items[0]);
+
+        await expect(page.locator('//span[@class="shopping_cart_badge"]')).toHaveText('1');
+
+    });
 
 });
