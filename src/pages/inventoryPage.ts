@@ -1,16 +1,16 @@
 import { Page, Locator } from '@playwright/test';
 import {logger} from "../logger/logger";
+import {BasePage} from "./core/basePage";
 
-export class InventoryPage {
+export class InventoryPage extends BasePage {
 
-    readonly page: Page;
     readonly sortDropdown: Locator;
     readonly prices: Locator;
     readonly cartBadge: Locator;
 
     constructor(page: Page) {
 
-        this.page = page;
+        super(page);
 
         this.sortDropdown = page.locator('//select[@class="product_sort_container"]');
         this.prices = page.locator('//div[@class="inventory_item_price"]');
