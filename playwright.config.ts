@@ -4,11 +4,25 @@ export default defineConfig({
 
     testDir: './src/tests',
 
+    retries: 1,
+
     fullyParallel: true,
 
+    timeout: 30000,
+
+    reporter: [
+        ['html'],
+        ['list']
+    ],
+
     use: {
+
         baseURL: 'https://www.saucedemo.com',
-        headless: true
+        headless: true,
+        screenshot: 'only-on-failure',
+        video: 'retain-on-failure',
+        trace: 'on-first-retry'
+
     },
 
     projects: [
