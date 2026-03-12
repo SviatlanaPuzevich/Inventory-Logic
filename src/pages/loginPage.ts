@@ -1,4 +1,5 @@
 import { Page, Locator } from '@playwright/test';
+import {logger} from "../logger/logger";
 
 export class LoginPage {
 
@@ -19,9 +20,13 @@ export class LoginPage {
 
     async login(username: string, password: string) {
 
+        logger.info(`Login attempt with user: ${username}`);
+
         await this.username.fill(username);
         await this.password.fill(password);
         await this.loginButton.click();
+
+        logger.info(`Login button clicked`);
 
     }
 }

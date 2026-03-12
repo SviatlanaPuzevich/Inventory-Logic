@@ -6,9 +6,23 @@
 - TypeScript
 - Page Object Model
 - XPath Locators
-- Parallel execution (Firefox + Edge)
+- Parallel execution
+
+### Browsers supported:
+
+- Chromium
+- Firefox
+- Edge
 
 ---
+
+## Logger
+
+The framework uses `Winston logger`.
+
+Logs are written to:
+- console
+- test.log
 
 ## Sorting Validation Logic
 

@@ -1,4 +1,5 @@
 import { Page, Locator } from '@playwright/test';
+import {logger} from "../logger/logger";
 
 export class InventoryPage {
 
@@ -18,6 +19,9 @@ export class InventoryPage {
     }
 
     async selectSort(option: string) {
+
+        logger.info(`Select sorting option: ${option}`);
+
         await this.sortDropdown.selectOption({ label: option });
     }
 
@@ -30,6 +34,8 @@ export class InventoryPage {
 
     async addItem(itemName: string) {
 
+        logger.info(`Adding item to cart: ${itemName}`);
+
         const button = this.page.locator(
             `//div[text()="${itemName}"]/ancestor::div[@class="inventory_item"]//button[text()="Add to cart"]`
         );
@@ -38,6 +44,8 @@ export class InventoryPage {
     }
 
     async removeItem(itemName: string) {
+
+        logger.info(`Removing item from cart: ${itemName}`);
 
         const button = this.page.locator(
             `//div[text()="${itemName}"]/ancestor::div[@class="inventory_item"]//button[text()="Remove"]`
