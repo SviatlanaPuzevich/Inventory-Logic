@@ -28,4 +28,26 @@ export class InventoryPage {
         return pricesText.map(p => Number(p.replace('$', '')));
     }
 
+    async addItem(itemName: string) {
+
+        const button = this.page.locator(
+            `//div[text()="${itemName}"]/ancestor::div[@class="inventory_item"]//button[text()="Add to cart"]`
+        );
+
+        await button.click();
+    }
+
+    async removeItem(itemName: string) {
+
+        const button = this.page.locator(
+            `//div[text()="${itemName}"]/ancestor::div[@class="inventory_item"]//button[text()="Remove"]`
+        );
+
+        await button.click();
+    }
+
+    async getCartCount(): Promise<string | null> {
+        return this.cartBadge.textContent();
+    }
+
 }
