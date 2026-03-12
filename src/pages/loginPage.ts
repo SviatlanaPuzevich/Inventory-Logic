@@ -1,20 +1,14 @@
-import { Page, Locator } from '@playwright/test';
+import {Page} from '@playwright/test';
 import {logger} from "../logger/logger";
 import {BasePage} from "./core/basePage";
+import {loginLocators} from "../locators/login.locators";
 
 export class LoginPage extends BasePage{
 
-    readonly username: Locator;
-    readonly password: Locator;
-    readonly loginButton: Locator;
 
     constructor(page: Page) {
 
         super(page);
-
-        this.username = page.locator('//input[@id="user-name"]');
-        this.password = page.locator('//input[@id="password"]');
-        this.loginButton = page.locator('//input[@value="Login"]');
 
     }
 
@@ -22,9 +16,10 @@ export class LoginPage extends BasePage{
 
         logger.info(`Login attempt with user: ${username}`);
 
-        await this.username.fill(username);
-        await this.password.fill(password);
-        await this.loginButton.click();
+        await this.page.fill(loginLocators.username, username);
+        await this.page.fill(loginLocators.password, password);
+        await this.page.click(loginLocators.loginButton);
+
 
         logger.info(`Login button clicked`);
 

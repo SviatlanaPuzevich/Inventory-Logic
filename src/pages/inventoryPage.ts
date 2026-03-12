@@ -1,20 +1,14 @@
-import { Page, Locator } from '@playwright/test';
+import {Page} from '@playwright/test';
 import {logger} from "../logger/logger";
 import {BasePage} from "./core/basePage";
+import {inventoryLocators} from "../locators/inventory.locators";
 
 export class InventoryPage extends BasePage {
-
-    readonly sortDropdown: Locator;
-    readonly prices: Locator;
-    readonly cartBadge: Locator;
 
     constructor(page: Page) {
 
         super(page);
 
-        this.sortDropdown = page.locator('//select[@class="product_sort_container"]');
-        this.prices = page.locator('//div[@class="inventory_item_price"]');
-        this.cartBadge = page.locator('//span[@class="shopping_cart_badge"]');
 
     }
 
@@ -22,12 +16,12 @@ export class InventoryPage extends BasePage {
 
         logger.info(`Select sorting option: ${option}`);
 
-        await this.sortDropdown.selectOption({ label: option });
+        await this.page.selectOption(inventoryLocators.sortDropdown, { label: option });
     }
 
     async getPrices(): Promise<number[]> {
 
-        const pricesText = await this.prices.allTextContents();
+        const pricesText = await this.page.locator(inventoryLocators.prices).allTextContents();
 
         return pricesText.map(p => Number(p.replace('$', '')));
     }
@@ -36,26 +30,18 @@ export class InventoryPage extends BasePage {
 
         logger.info(`Adding item to cart: ${itemName}`);
 
-        const button = this.page.locator(
-            `//div[text()="${itemName}"]/ancestor::div[@class="inventory_item"]//button[text()="Add to cart"]`
-        );
-
-        await button.click();
+        await this.page.click(inventoryLocators.addButton(itemName))
     }
 
     async removeItem(itemName: string) {
 
         logger.info(`Removing item from cart: ${itemName}`);
 
-        const button = this.page.locator(
-            `//div[text()="${itemName}"]/ancestor::div[@class="inventory_item"]//button[text()="Remove"]`
-        );
-
-        await button.click();
+        await this.page.click(inventoryLocators.removeButton(itemName));
     }
 
     async getCartCount(): Promise<string | null> {
-        return this.cartBadge.textContent();
+        return this.page.textContent(inventoryLocators.cartBadge);
     }
 
 }
